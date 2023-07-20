@@ -1,0 +1,93 @@
+*{
+    box-sizing: border-box;
+}
+
+
+.tweet{
+ border: 2px solid red; 
+ display: flex;
+ flex-direction: column;
+ 
+ 
+}
+.d1{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; 
+    margin: 0.5rem;
+    padding: 1rem;
+    background-color: rgb(152, 236, 250);
+}
+.d2{
+    border: 2px solid yellow;
+    height: 100%;
+    
+}
+.scroll-bar{
+    height: 85vh;
+    border: 2px solid grey;
+    margin: 0.5rem;
+    overflow: hidden;
+    overflow-y: scroll; 
+}
+.contnt{
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+.tweet-div{
+    display: flex;
+    flex-direction: row;
+    
+}
+.pic-section{
+    height: 60px;
+    text-align: center;
+    width: 60px;
+    border: 2px solid green;
+    border-radius: 50%;
+    margin-top: 1rem;
+}
+.pic-section > img{
+    height: 60px;
+    width: 60px;
+    object-fit:fill;
+    border-radius:50% ;
+}
+.tw2{
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.5rem;
+}
+.user-name{
+    margin-top: 0.5rem;
+}
+span{
+    color: black;
+    margin-left: 1rem;
+}
+.content-section{
+    
+    margin-top: 0.5rem;
+}
+.img-section > img{
+   height: 300px;
+   width:60% ;
+   margin: 0.5rem 0;
+}
+.likes-section{
+    display: flex;
+    flex-direction: row;
+    margin-left: 5rem;
+    margin-bottom: 0.5rem;
+}
+.link-btn{
+ width: 4rem;
+}
+.lks{
+    width: 15%;
+
+    text-align: center;
+    font-size: 18px;
+    height: 2rem;
+}

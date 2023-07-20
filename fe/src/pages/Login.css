@@ -1,0 +1,102 @@
+@media only screen and (min-width:1451px){
+    
+    .tot-back{
+        
+        background-image: url("../images/back.avif");
+        height:740px;
+        width: 100%;
+        background-size: cover;
+        background-position:right;
+        
+    }
+    
+    .lg-box{
+        height: 400px;
+        width: 60%;
+        background-color:aqua;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+    
+    .lg-img{
+        margin-left: -13px;
+    }
+    .input-block{
+        margin: 1rem 0;
+    }
+    .bot-text{
+        font-weight: bold;
+        font-family: cursive;
+    }
+    }
+    
+    @media only screen and (max-width:1450px) and (min-width:1086px){
+        .lg-box{
+            height: 400px;
+            width: 80%;
+            background-color:aqua;
+            position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+           
+        }
+        .tot-back{
+        
+            background-image: url("../images/back.avif");
+            height:740px;
+            width: 100%;
+            
+        }
+        .lg-img{
+            margin-left: -13px;
+        }
+        .input-block{
+            margin: 1rem 0;
+        }
+        .bot-text{
+            font-weight: bold;
+            font-family: cursive;
+        }
+    }
+    
+    @media only screen and (max-width:1086px) and (min-width:765px){
+        .lg-box{
+            height: 400px;
+            width: 80%;
+            background-color:aqua;
+            position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+           
+        }
+       
+        .lg-img{
+            margin-left: -13px;
+            height: 400px;
+            width: 300px;
+        }
+        .input-block{
+            margin: 1rem 0;
+            
+        }
+        .bot-text{
+            font-weight: bold;
+            font-family: cursive;
+        }
+    }
+    
+    @media only screen and (max-width:1086px) and (min-width:870px){
+        .lg-img{
+            margin-left: -13px;
+            height: 400px;
+            width: 350px;
+        }
+       .smal{
+        margin-top: 10px;
+       }
+    }
+  

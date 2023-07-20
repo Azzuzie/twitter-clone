@@ -1,0 +1,76 @@
+.profile-section{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid blue;
+}
+.profile-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0.5rem;
+}
+.profile-pic{
+    background-color: aqua;
+    height: 10rem;
+    width: 10rem;
+    border-radius: 50%;
+    margin-top: -4rem ;
+    margin-left: 2rem;
+}
+.profile-pic>img{
+    height: 10rem;
+    width: 10rem;
+    object-fit:fill;
+    border-radius:50% ;
+}
+.name{
+    margin-left: 4rem;
+}
+.name>p{
+    margin-top: -5px;
+}
+.dob{
+    height: 3rem;
+    /* border: 2px solid red; */
+    display: flex;
+    flex-direction: row;
+    margin-top: -1rem;
+    margin-left: 0.5rem;
+}
+.dob-box{
+    width: 25%;
+    /* border: 2px solid green; */
+    margin: 2px;
+    margin-left: 0.5rem;
+    /* text-align: center; */
+}
+.fans-list{
+    height: 3rem;
+    /* border: 2px solid red; */
+    display: flex;
+    flex-direction: row;
+    margin-left: 0.5rem;
+}
+.follow{
+    width: 12%;
+    /* border: 2px solid green; */
+    margin: 2px;
+    font-weight: bold;
+    margin-left: 0.5rem;
+    /* text-align: center; */
+}
+button{
+    background-color: black;
+    color: white;
+    height: 2.3rem;
+}
+.clr{
+    flex-basis: 150px;
+    background-color: rgb(0, 102, 255);
+}
+.details-section{
+    flex-basis: 250px;
+    border: 2px solid red;
+    display: flex;
+    flex-direction: column;
+}

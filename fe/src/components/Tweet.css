@@ -1,0 +1,15 @@
+.like-btn:focus{
+    background-color: red;
+}
+.scroll{
+    height: 85vh;
+    border: 2px solid grey;
+    margin: 0.5rem;
+    overflow: hidden;
+    overflow-y: scroll; 
+}
+.content{
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
