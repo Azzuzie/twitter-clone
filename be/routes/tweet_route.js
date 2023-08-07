@@ -10,13 +10,14 @@ const protected=require('../middleware/protected')
 
 router.post('/tweet', protected, async (req, res) => {
   try {
-    const { content } = req.body;
+    const { content,image } = req.body;
     const { _id } = req.user;
 
 
     // Create a new tweet
     const newTweet = new Tweet({
       content,
+      image,
       tweetedBy: _id,
     });
 
@@ -125,39 +126,81 @@ router.post('/tweet/:id/reply', protected, async (req, res) => {
     }
   });
 
+  // router.get('/tweets', protected,async (req, res) => {
+  //   const tweets = await Tweet.find().sort('-createdAt')
+  //       .populate("author","_id name profilePicture")
+  //   return res.status(201).json(tweets);
+  // });
 
-//   const multer = require('multer');
+  //all users posts
+  router.get("/tweets", protected, (req, res) => {
+    console.log("entered to get tweets")
+    Tweet.find()
+      .sort({ createdAt: -1 })
+      .populate("tweetedBy", "_id name username profilePicture dateOfBirth location")
+      // .populate("comments.commentedBy", "_id fullName ")
+      .then((tweets) => {
+        return res.status(200).json({ tweets: tweets });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, './images');
-//   },
-//   filename: (req, file, cb) => {
-//     const ext = file.originalname.split('.').pop();
-//     const filename = `profile-pic-${Date.now()}.${ext}`;
-//     cb(null, filename);
-//   }
-// });
+  //replies of a paarticular tweet
+  router.get("/tweets/:tweetId/replies", protected, (req, res) => {
+    const tweetId = req.params.tweetId;
+    Tweet.findById(tweetId)
+      .populate("replies.repliedBy", "_id name username profilePicture dateOfBirth location")
+      .then((tweet) => {
+        if (!tweet) {
+          return res.status(404).json({ error: "Tweet not found" });
+        }
+        return res.status(200).json({ replies: tweet.replies });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
-// router.post('/api/user/:id/uploadProfilePic', multer({storage: storage}), async(req, res) => {
-//   // Get the user ID from the request path
-//   const id = req.params.id;
-
-//   // Get the file from the request
-//   const file = req.file;
-
-//   // Save the file to disk
-//   await file.save();
-
-//   // Update the user profile picture in the database
-//   const user = await User.findById(id);
-//   user.profilePic = `/images/${file.filename}`;
-//   await user.save();
-
-//   // Return the success message
-//   res.send('Profile picture uploaded successfully');
-// });
-
-
+   //Add reply to a tweet
+   router.post("/tweets/:tweetId/replies", protected, (req, res) => {
+    const tweetId = req.params.tweetId;
+    const content = req.body.content;
+  
+    const newReply = new Tweet({
+      content,
+      tweetedBy: req.user.id,
+    });
+  
+    Tweet.findByIdAndUpdate(
+      tweetId,
+      {
+        $push: {
+          replies: {
+            content: newReply.content, // Add the content to the 'replies' array
+            repliedBy: newReply.tweetedBy,
+          },
+        },
+      },
+      { new: true }
+    )
+      .then((tweet) => {
+        if (!tweet) {
+          return res.status(404).json({ error: "Tweet not found" });
+        }
+        return res.status(200).json({ tweet });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+  
+  
+  
+  
+  
+  
+  
 
 module.exports = router;

@@ -9,10 +9,12 @@ const Tweet=mongoose.model("Tweet")
 const {JWT_SECRET}=require('../config')
 const protected=require('../middleware/protected')
 
+
+//find the user by id
 router.get('/user/:id', protected, async (req, res) => {
     try {
       const { id } = req.params;
-  
+      console.log(id)
       // Find the user by ID
       const user = await User.findById(id)
         .select('-password') // Exclude the password field
@@ -23,7 +25,7 @@ router.get('/user/:id', protected, async (req, res) => {
         return res.status(404).json({ message: 'User not found' });
       }
   
-      return res.status(200).json({ user });
+      return res.status(200).json({ user: user });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Internal Server Error' });
@@ -125,7 +127,8 @@ router.post('/user/:id/unfollow',protected, async (req, res) => {
 // Add the necessary validations
 // Finally save the edited user in DB
 
-router.put('/user/:id', protected, async(req, res) => {
+//Editing the profile
+router.put('/user/:id',  async(req, res) => {
     // Get the user ID from the request path
     const {id} = req.params;
     console.log(req.body)
@@ -134,18 +137,18 @@ router.put('/user/:id', protected, async(req, res) => {
   
     // Validate the data
     if (!name) {
-      res.status(400).send('Please provide a name');
-      return;
+      return res.status(400).json({error:'Please provide a name'});
+      
     }
   
     if (!dateOfBirth) {
-      res.status(400).send('Please provide a date of birth');
-      return;
+      return res.status(400).json({error:'Please provide a date of birth'});
+     
     }
   
     if (!location) {
-      res.status(400).send('Please provide a location');
-      return;
+      return res.status(400).json({error:'Please provide a location'});
+      
     }
   
     // Update the user in the database
@@ -157,23 +160,51 @@ router.put('/user/:id', protected, async(req, res) => {
   
     // Return the updated user
     res.send(user);
+    // console.log(user)
   });
 
   // Endpoint POST /api/user/:id/tweets
 // This API will return list of all the tweets tweeted by a user
 
-router.post('/user/:id/tweets', protected, async(req, res) => {
+// router.get('/user/:id/mytweets', protected, async(req, res) => {
+//     // Get the user ID from the request path
+//     const {id} = req.params;
+//     // Get the tweets from the database
+//     const tweets = await Tweet.find({
+//         tweetedBy: id
+//     });
+//   console.log(tweets)
+//     // Return the tweets
+//     return res.status(200).send(tweets);
+//   });
+
+//all posts only from logged in user
+router.get("/mytweets", protected, (req, res) => {
+  Tweet.find({ tweetedBy: req.user._id })
+      .sort({ createdAt: -1 })
+      .populate("tweetedBy", "_id name username profilePicture dateOfBirth location")
+      .then((tweets) => {
+          return res.status(200).json({ tweets: tweets })
+      })
+      .catch((error) => {
+          console.log(error);
+      })
+});
+  
+  router.get('/user/:id', protected,async(req, res) => {
+    console.log("entered to get all details")
     // Get the user ID from the request path
     const {id} = req.params;
-    // Get the tweets from the database
-    const tweets = await Tweet.find({
-        tweetedBy: id
-    });
-  console.log(tweets)
-    // Return the tweets
-    res.send(tweets);
-  });
-  
+
+    // Get the user from the database
+    const user = await User.findById(id);
+
+    // Remove the password from the user object
+    delete user.password;
+
+    // Return the user object
+    return res.status(201).send(user);
+});
 
   
 

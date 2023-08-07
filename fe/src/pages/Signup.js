@@ -3,43 +3,85 @@ import "./Signup.css"
 import Twitter from "../images/twlg.jpg"
 import {Link,useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
+
 const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
+    const [phone, setPhone] = useState(''); //phone == username
+    const [loading, setLoading] = useState(false);
     const navigate=useNavigate()
-    // const [loading,setLoading]=useState(false)
+
     const signup = async (e) => {
       e.preventDefault();
       
         const data={username:phone,name:name,email:email,password:password}
-        console.log(data)
-        axios.post("http://localhost:4000/register",data)
-        .then((result)=>{
-          if(result){
-           
-            Swal.fire({
-              icon:'success',
-              title:'User registered successfully'
+        // console.log(data)
+        const promise = new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve();
+          }, 3000);
+        });
+    
+        toast.promise(
+          promise,
+          {
+            pending: 'Loading...'
+          },
+        );
+
+        promise
+        .then(() => {
+          setLoading(false);
+          axios.post('http://localhost:4000/register', data)
+            .then((result) => {
+              if (result) {
+                toast.success('User registered successfully');
+                navigate('/login')
+              }
+              setEmail('')
+              setName('')
+              setPassword('')
+              setPhone('')
             })
-            navigate('/login')
-          }
-          setEmail('')
-          setName('')
-          setPassword('')
-          setPhone('')
+            .catch((error) => {
+              toast.error(error.response.data.error);
+            });
         })
-        .catch((error)=>{
-          console.log(error)
-          Swal.fire({
-            icon:'error',
-            title:error.response.data.error
-          })
-        })
-     
+        .catch(() => {
+          setLoading(false);
+        });
+
+
+
+        // axios.post("http://localhost:4000/register",data)
+        // .then((result)=>{
+        //   if(result){
+        //    toast.success("User registered successfully")
+        //     // Swal.fire({
+        //     //   icon:'success',
+        //     //   title:'User registered successfully'
+        //     // })
+        //     navigate('/login')
+        //   }
+        //   setEmail('')
+        //   setName('')
+        //   setPassword('')
+        //   setPhone('')
+        // })
+        // .catch((error)=>{
+        // //   console.log(error)
+        // toast.error(error.response.data.error)
+        // //   Swal.fire({
+        // //     icon:'error',
+        // //     title:error.response.data.error
+        // //   })
+        // })
     };
+
+
   return (
  
     <>    
@@ -53,7 +95,7 @@ const Signup = () => {
                 <form onSubmit={(e)=>signup(e)}>
                     <div className="mb-3">
                         {/* <label for="exampleInputEmail1" className="form-label">Phone :-</label> */}
-                        <input type="text" className="form-control input-block" placeholder='Phone'  onChange={(ev) => setPhone(ev.target.value)}/>
+                        <input type="text" className="form-control input-block" placeholder='Username'  onChange={(ev) => setPhone(ev.target.value)}/>
 
                         {/* <label for="exampleInputEmail1" className="form-label">Email address :-</label> */}
                         <input type="email" className="form-control input-block" placeholder='Email' onChange={(ev) => setEmail(ev.target.value)}/>
@@ -65,7 +107,7 @@ const Signup = () => {
                         <input type="password" className="form-control input-block" placeholder='Password' onChange={(ev) => setPassword(ev.target.value)}/>
                     </div>
 
-                    <button type="submit" className="btn btn-info login-btn">Sign Up</button>
+                    <button type="submit" className="btn btn-info login-btn" disabled={loading}>Sign Up</button>
 
                 
 

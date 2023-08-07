@@ -21,8 +21,8 @@ const tweetSchema = new mongoose.Schema({
   }],
   image: String,
   replies: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Tweet',
+    content: String,
+    repliedBy: { type:mongoose.Schema.Types.ObjectId , ref: "User" }
   }],
 }, { timestamps: true });
 

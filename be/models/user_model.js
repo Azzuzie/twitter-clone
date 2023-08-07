@@ -20,9 +20,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  profilePicture: String,
+  profilePicture: {
+    type: String,
+    default:'https://tse4.mm.bing.net/th?id=OIP.MXXcVA3-a55KwAUXCG5HAAHaE8&pid=Api&P=0&h=180'
+  },
   location: String,
-  dateOfBirth: Date,
+  dateOfBirth:{
+    type:Date,
+    default:1111-11-11
+  } ,
   followers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

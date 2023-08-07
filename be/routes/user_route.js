@@ -57,7 +57,7 @@ router.post("/login", (req, res) => {
                 .then((didMatch) => {
                     if (didMatch) {
                         const jwttoken=jwt.sign({_id:userInDB._id},JWT_SECRET);
-                        const userInfo={"id":userInDB._id,"email":userInDB.email,"fullName":userInDB.name};
+                        const userInfo={"id":userInDB._id,"email":userInDB.email,"fullName":userInDB.name,"username":userInDB.username,"dob":userInDB.dateOfBirth,"location":userInDB.location,"image":userInDB.profilePictu};
 
                         res.status(200).json({ result: {token:jwttoken,user:userInfo} });
                     } else {

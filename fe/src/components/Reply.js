@@ -1,50 +1,34 @@
-// import React from  'react'
-import React,{useState} from  'react'
-// import {toast} from 'react-toastify'
-// import axios from 'axios';
-// import Twitter from "../images/twlg.jpg"
+import React from 'react'
+import Twitter from "../images/twlg.jpg"
 import {Link} from 'react-router-dom';
 
-import './Details.css'
-import Reply from '../components/Reply'
-
-// import Twitter from "../images/twlg.jpg"
-
-const Details = (tweet) => {
-
-const [replies,setReplies]=useState([])
-
-setReplies(tweet.tweet.replies)
-console.log(tweet)
-
+const Reply = (reply) => {
+    console.log("entered rep:",reply,"rep data")
   return (
     <>
-    <div className='row tweet-div'>
+        <div className='row tweet-div'>
     <div className='col-1 tw1'>
     <div className='pic-section'>
-        <img src={tweet.tweet.tweetedBy.profilePicture} alt='img' />
+        <img src={Twitter} alt='img' />
     </div>
     </div>
     <div className='col-10 tw2'>
     <div className='user-name'>
-        <Link to='/profile' >@{tweet.tweet.tweetedBy.username} </Link><span>- {tweet.tweet.createdAt} </span>
+        <Link to='/profile' >@ajith_gurram </Link><span>-Fri Jul 21 2003 </span>
     </div>
     <div className='content-section'>
-    <p>{tweet.tweet.content}</p>
-    </div>
-    <div className='img-section'> 
-        <img src={tweet.tweet.image} alt='img' className=''/>
+    <p>
+    Nice pic ajith</p>
     </div>
     </div>
 </div>
-
 <div className='likes-section'>
             <div className='btn btn-outline-primary lks like-btn'>
-            <p><i className=" fa-regular fa-heart"></i> {tweet.tweet.likes.length}</p>
+            <p><i className=" fa-regular fa-heart"></i> 5</p>
             
             </div>
             <div className='btn btn-outline-primary lks' data-bs-toggle="modal" data-bs-target="#exampleModal1" >
-            <pre><i className="fa-regular fa-comment"></i> {tweet.tweet.replies.length}</pre>
+            <pre><i className="fa-regular fa-comment"></i> 8</pre>
             </div>
 
             <div className="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true">
@@ -66,28 +50,15 @@ console.log(tweet)
                     </div>
                     </div>
                 </div>
-            </div>
+    </div>
 
 
             <div className='btn btn-outline-primary lks' >
-            <pre><i className="fa-solid fa-retweet"></i>  {tweet.tweet.retweetBy.length}</pre>
+            <pre><i className="fa-solid fa-retweet"></i> 7</pre>
             </div>
         </div>
-
-{/* //replies section */}
-
-<h3>Replies</h3>
-
-<div>
-{/* <Reply/>
-{tweet.tweet.replies} */}
-{replies.map((reply) => (
-              <Reply key={reply.id} reply={reply} />
-            ))}
-</div>
-</>
-
+    </>
   )
 }
 
-export default Details
+export default Reply

@@ -23,6 +23,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/TwitterClone",  {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({extended:true}))
   app.use(require('./routes/user_route'))
+  app.use(require('./routes/file_route'))
   app.use(require('./routes/tweet_route'))
   app.use(require('./routes/user_related_route'))
   
