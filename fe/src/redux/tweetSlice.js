@@ -22,7 +22,20 @@ const CONFIG_OBJ={
         }
   });
 
- 
+  export const fetchUserTweets = createAsyncThunk(
+    "tweets/fetchusertweets", async (_, thunkAPI) => {     
+       try {
+          //const response = await fetch(`url`); //where you want to fetch data
+          //Your Axios code part.
+          const response = await axios.get(`http://localhost:4000/mytweets`,CONFIG_OBJ);//where you want to fetch data
+        //   const response=axios.get(`http://localhost:4000/tweets`,CONFIG_OBJ)
+       
+          return await response.data.tweets;
+        } catch (error) {
+           return thunkAPI.rejectWithValue({ error: error.message });
+        }
+  });
+
   const tweetSlice = createSlice({
     name: "tweets",
     initialState: {
@@ -40,7 +53,18 @@ const CONFIG_OBJ={
        builder.addCase(
         fetchTweets.rejected,(state, action) => {
        });
-    }
+       builder.addCase(fetchUserTweets.pending, (state) => {
+         state.tweets = [];
+       });
+       builder.addCase(
+        fetchUserTweets.fulfilled, (state, { payload }) => {
+             // add the user tweets to the state
+             state.tweets = state.tweets.concat(payload);
+       });
+       builder.addCase(
+        fetchUserTweets.rejected,(state, action) => {
+       });
+     }
  });
  
  

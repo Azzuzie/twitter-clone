@@ -91,6 +91,7 @@ const Tweet = ({ tweet }) => {
         <div className='scroll'>
           <div className='content'>
             <Details tweet={tweet} />
+            {/* <Details/> */}
           </div>
         </div>
       </Modal.Body>

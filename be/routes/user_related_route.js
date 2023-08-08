@@ -180,6 +180,7 @@ router.put('/user/:id',  async(req, res) => {
 
 //all posts only from logged in user
 router.get("/mytweets", protected, (req, res) => {
+  console.log("my tweets")
   Tweet.find({ tweetedBy: req.user._id })
       .sort({ createdAt: -1 })
       .populate("tweetedBy", "_id name username profilePicture dateOfBirth location")
