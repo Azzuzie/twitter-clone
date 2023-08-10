@@ -27,7 +27,9 @@ const Slide = () => {
           </div>
     </div>
     <div className='b2'>
-      Logout
+    <div>
+      <h6 style={{"text-align":"center"}}>Copyright @ Ajith Gurram</h6>
+      </div>
     </div>
   </div>
 )

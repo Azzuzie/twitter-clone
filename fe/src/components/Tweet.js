@@ -5,14 +5,52 @@ import Details from '../pages/Details'
 // import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import './Tweet.css'
-// import React,{useState,useEffect} from  'react'
-// import {toast} from 'react-toastify'
-// import axios from 'axios';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 // import { useState } from "react";
+
 
 const Tweet = ({ tweet }) => {
   const [lgShow, setLgShow] = useState(false);
+  const [rep,setRep]=useState('')
+  const [isLiked, setIsLiked] = useState(false);
   // console.log("Entered tweet component")
+
+  const CONFIG_OBJ={
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":"Bearer "+localStorage.getItem("token")
+    }
+  }
+
+  const HandleLike = async () => {
+    if (isLiked) {
+    await axios.post(`http://localhost:4000/tweet/${tweet._id}/dislike`, CONFIG_OBJ);
+        setIsLiked(false);
+      } else {
+        await axios.post(`http://localhost:4000/tweet/${tweet._id}/like`, CONFIG_OBJ);
+        setIsLiked(true);
+      }
+    };
+
+const Reply=async()=>{
+  if(!rep){
+    toast.error("add reply")
+  }
+  else{
+    // const user=JSON.parse(localStorage.getItem('user'))
+    const body={content:rep}
+    debugger
+    await axios.post(`http://localhost:4000/tweet/${tweet._id}/addReply`,body,CONFIG_OBJ)
+    .then((response)=>{
+        toast.success("replied successfully")
+    })
+    .catch(()=>{
+      toast.error("Error while adding reply")
+    })
+  }
+}
+
 
   return (
     <>
@@ -42,7 +80,10 @@ const Tweet = ({ tweet }) => {
     </div>
 
     <div className='likes-section'>
-      <div className='btn btn-outline-primary lks like-btn'>
+    <div
+        className={`btn btn-outline-primary lks ${isLiked ? 'liked' : ''}`}
+        onClick={HandleLike}
+      >
         <p><i className=" fa-regular fa-heart"></i> {tweet.likes.length}</p>
       </div>
       <div className='btn btn-outline-primary lks' data-bs-toggle="modal" data-bs-target="#exampleModal1" >
@@ -58,12 +99,12 @@ const Tweet = ({ tweet }) => {
             </div>
             <div className="modal-body">
               <form>
-                <input type='text-area' placeholder='reply' /> <br/> <br/>
+                <input type='text-area' placeholder='reply' onChange={(ev) => setRep(ev.target.value)}/> <br/> <br/>
               </form>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-primary">Reply</button>
+              <button type="button" className="btn btn-primary" onClick={()=>Reply()}>Reply</button>
             </div>
           </div>
         </div>

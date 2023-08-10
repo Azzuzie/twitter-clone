@@ -12,6 +12,7 @@ const protected=require('../middleware/protected')
 
 //find the user by id
 router.get('/user/:id', protected, async (req, res) => {
+  // console.log("user details")
     try {
       const { id } = req.params;
       console.log(id)
@@ -130,12 +131,10 @@ router.post('/user/:id/unfollow',protected, async (req, res) => {
 //Editing the profile
 router.put('/user/:id',  async(req, res) => {
     // Get the user ID from the request path
+    console.log("edited profile")
     const {id} = req.params;
     console.log(req.body)
-    // Get the name, date of birth, and location from the request body
     const {name,dateOfBirth,location} = req.body;
-  
-    // Validate the data
     if (!name) {
       return res.status(400).json({error:'Please provide a name'});
       
@@ -159,7 +158,7 @@ router.put('/user/:id',  async(req, res) => {
     await user.save();
   
     // Return the updated user
-    res.send(user);
+    res.status(200).json({"user":user});
     // console.log(user)
   });
 
@@ -180,7 +179,7 @@ router.put('/user/:id',  async(req, res) => {
 
 //all posts only from logged in user
 router.get("/mytweets", protected, (req, res) => {
-  console.log("my tweets")
+  // console.log("my tweets")
   Tweet.find({ tweetedBy: req.user._id })
       .sort({ createdAt: -1 })
       .populate("tweetedBy", "_id name username profilePicture dateOfBirth location")
@@ -192,8 +191,9 @@ router.get("/mytweets", protected, (req, res) => {
       })
 });
   
+//route to delete user from db
   router.get('/user/:id', protected,async(req, res) => {
-    console.log("entered to get all details")
+    // console.log("entered to get all details")
     // Get the user ID from the request path
     const {id} = req.params;
 

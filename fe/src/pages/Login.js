@@ -5,7 +5,7 @@ import axios from 'axios';
 import Twitter from "../images/twlg.jpg"
 import {Link,useNavigate} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import {loginSuccess,loginError} from '../redux/userSlice'
+import {addUser} from '../redux/userSlice'
 
 const Login = () => {
 
@@ -19,7 +19,6 @@ const Login = () => {
   const login = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     const data = { email: email, password: password };
     // console.log(data);
     const promise = new Promise((resolve, reject) => {
@@ -43,16 +42,20 @@ const Login = () => {
             if (result) {
               localStorage.setItem("token",result.data.result.token)
               localStorage.setItem("user",JSON.stringify(result.data.result.user))
-              dispatch(loginSuccess(result.data.result.user))
+              
               toast.success('Login Successful!');
+              
               navigate('/home')
             }
             setEmail('')
             setPassword('')
           })
+          .then(()=>{
+            dispatch(addUser())
+          })
           .catch((error) => {
             toast.error(error.response.data.error);
-            dispatch(loginError())
+            // dispatch(removeUser())
           });
       })
       .catch(() => {

@@ -32,6 +32,7 @@ router.post('/tweet', protected, async (req, res) => {
 });
 
 router.post('/tweet/:id/like', protected, async (req, res) => {
+  console.log("entern like")
     try {
       const { id } = req.params;
       const { _id } = req.user;
@@ -62,6 +63,7 @@ router.post('/tweet/:id/like', protected, async (req, res) => {
 
 
   router.post('/tweet/:id/dislike', protected, async (req, res) => {
+    console.log("entern dislike")
     try {
       const { id } = req.params;
       const { _id } = req.user;
@@ -92,49 +94,44 @@ router.post('/tweet/:id/like', protected, async (req, res) => {
   });
   
 
-router.post('/tweet/:id/reply', protected, async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { content } = req.body;
-      const { userId } = req;
+// router.post('/tweet/:id/reply', protected, async (req, res) => {
+//     try {
+//       const { id } = req.params;
+//       const { content } = req.body;
+//       const { _id } = req.user;
   
-      // Find the tweet
-      const tweet = await Tweet.findById(id);
-      if (!tweet) {
-        return res.status(404).json({ message: 'Tweet not found' });
-      }
+//       // Find the tweet
+//       const tweet = await Tweet.findById(id);
+//       if (!tweet) {
+//         return res.status(404).json({ message: 'Tweet not found' });
+//       }
   
-      // Create a new reply tweet
-      const newReply = new Tweet({
-        content,
-        tweetedBy: userId,
-      });
+//       // Create a new reply tweet
+//       const newReply = new Tweet({
+//         content,
+//         tweetedBy: _id,
+//       });
   
-      // Save the reply tweet to the database
-      await newReply.save();
+//       // Save the reply tweet to the database
+//       await newReply.save();
   
-      // Add the reply tweet ID to the parent tweet's replies array
-      tweet.replies.push(newReply._id);
+//       // Add the reply tweet ID to the parent tweet's replies array
+//       tweet.replies.push(newReply._id);
   
-      // Save the parent tweet to the database
-      await tweet.save();
+//       // Save the parent tweet to the database
+//       await tweet.save();
   
-      return res.status(201).json({ message: 'Reply tweet created successfully' });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
-  });
+//       return res.status(201).json({ message: 'Reply tweet created successfully' });
+//     } catch (error) {
+//       console.error(error);
+//       return res.status(500).json({ message: 'Internal Server Error' });
+//     }
+//   });
 
-  // router.get('/tweets', protected,async (req, res) => {
-  //   const tweets = await Tweet.find().sort('-createdAt')
-  //       .populate("author","_id name profilePicture")
-  //   return res.status(201).json(tweets);
-  // });
 
   //all users posts
   router.get("/tweets", protected, (req, res) => {
-    console.log("entered to get tweets")
+    // console.log("entered to get tweets")
     Tweet.find()
       .sort({ createdAt: -1 })
       .populate("tweetedBy", "_id name username profilePicture dateOfBirth location")
@@ -149,6 +146,7 @@ router.post('/tweet/:id/reply', protected, async (req, res) => {
 
   //replies of a paarticular tweet
   router.get("/tweets/:tweetId/replies", protected, (req, res) => {
+    // console.log("entered replies restapi")
     const tweetId = req.params.tweetId;
     Tweet.findById(tweetId)
       .populate("replies.repliedBy", "_id name username profilePicture dateOfBirth location")
@@ -164,10 +162,10 @@ router.post('/tweet/:id/reply', protected, async (req, res) => {
   });
 
    //Add reply to a tweet
-   router.post("/tweets/:tweetId/replies", protected, (req, res) => {
+   router.post("/tweet/:tweetId/addReply", protected, (req, res) => {
     const tweetId = req.params.tweetId;
     const content = req.body.content;
-  
+   console.log("reply added to",tweetId)
     const newReply = new Tweet({
       content,
       tweetedBy: req.user.id,

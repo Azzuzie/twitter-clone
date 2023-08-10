@@ -1,15 +1,17 @@
 import { React, useEffect, useState } from "react";
 import "./Profile.css";
-// import axios from 'axios'
+import "./Home.css"
+import axios from 'axios'
 import { toast } from "react-toastify";
 import Slide from "../components/Slide";
 import Tweet from "../components/Tweet";
 import Twitter from "../images/twlg.jpg";
 import { useDispatch, useSelector } from "react-redux";
-// import { loginError,loginSuccess } from '../redux/userSlice'
-// import { userReducer } from '../redux/userReducer'
-// import {Link} from 'react-router-dom';
 import { selectTweets,fetchUserTweets } from '../redux/tweetSlice';
+// import {selectUsers} from '../redux/userSlice'
+import { addUser } from "../redux/userSlice";
+// import { updateUser } from "../redux/userSlice";
+
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -20,59 +22,54 @@ const Profile = () => {
 
   let { tweets } = useSelector(selectTweets);
   tweets=tweets.tweets
+
+
+  const array= useSelector(state => state.user)
+  let { user} = array;
+   user= user[0];
   debugger
+  console.log(user)
+
   useEffect(() => {
      dispatch(fetchUserTweets());
+    //  dispatch(addUser())
   }, [dispatch]);
 
-  // const CONFIG_OBJ={
-  //   headers:{
-  //     "Content-Type":"application/json",
-  //     "Authorization":"Bearer "+localStorage.getItem("token")
-  //   }
-  // }
 
-  const saveDetails = async () => {
-    toast.success("Edidted successfully..");
-    console.log(name, location, dob);
-  };
+  const CONFIG_OBJ={
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":"Bearer "+localStorage.getItem("token")
+    }
+  }
+
+
+ const saveDetails = async () => {
+  if (!name || !location || !dob) {
+    toast.error("Fields required");
+  } else {
+    const body = {
+      name,
+      dateOfBirth: dob,
+      location,
+    };
+    await axios.put(`http://localhost:4000/user/${user._id}`, body, CONFIG_OBJ)
+      .then((response) => {
+        toast.success("edited successfully");
+      }).then(()=>{
+        dispatch(addUser());
+      })
+      .catch((error) => {
+        toast.error("Error while editing profile");
+      });
+  }
+};
 
   //  const dispatch=useDispatch()
-  const { currentUser } = useSelector((state) => state.user);
+  
 
-  console.log(currentUser);
-  // const [user,setUser]=useState([])
-
-  // useEffect(() => {
-  //   const getUser=async()=>{
-  //   const result = await axios.get(`http://localhost:4000/user/${currentUser.id}`, CONFIG_OBJ);
-  //   console.log(result);
-  //   if (result.status === 200) {
-  //     setUser(result.data.user);
-  //     dispatch(loginSuccess(user))
-  //     // toast.success("Tweets by user id");
-  //   } else {
-  //     toast.error("Some error tweets by user id");
-  //     dispatch(loginError())
-  //   }
-  // }
-  // getUser()
-  // },[dispatch,CONFIG_OBJ,currentUser.id,user]);
-
-  //   const [tweets, setTweets] = useState([]);
-  // // get all tweets
-
-  // useEffect(()=>{
-  //   const getTweets=async()=>{
-  //     // var user=localStorage.getItem('user')
-
-  //    const response=await axios.get(`http://localhost:4000/mytweets`,CONFIG_OBJ)
-  //    console.log(response)
-  //    setTweets(response.data.tweets)
-  //    console.log(tweets)
-  //   }
-  //   getTweets()
-  // },)
+  // console.log(currentUser);
+ 
 
   return (
     <div className="container">
@@ -110,12 +107,7 @@ const Profile = () => {
                         <h1 className="modal-title fs-5" id="exampleModalLabel">
                           Edit Profile
                         </h1>
-                        <button
-                          type="button"
-                          className="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                        ></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div className="modal-body">
                         <form>
@@ -168,40 +160,61 @@ const Profile = () => {
 
             <div className="details-list">
               <div className="name">
-                <h5>{currentUser.fullName}</h5>
-                <p>@{currentUser.username}</p>
+                <h5>{user.name}</h5>
+                <p>@{user.username}</p>
               </div>
               <div className="dob">
                 <div className="dob-box">
                   <p>
-                    <i class="fa-solid fa-calendar-days"></i> {currentUser.dob}
+                    <i class="fa-solid fa-calendar-days"></i> {user.dateOfBirth}
                   </p>
                 </div>
                 <div className="dob-box">
                   <i class="fa-sharp fa-solid fa-location-dot"></i>{" "}
-                  {currentUser.location}
+                  {user.location}
                 </div>
               </div>
             </div>
 
             <div className="fans-list">
+
               <div className="follow">
-                <p>7 followers</p>
+              <p>{user.following.length} following</p>  
               </div>
               <div className="follow">
-                <p>7 following</p>
+                <p>{user.followers.length} following</p>
               </div>
             </div>
           </div>
 
-          <div className="tw-rpl">
-            <h3 style={{ textAlign: "center", textDecoration: "underline" }}>
+
+          <div className='d2'>
+        <div className='scroll-bar'>
+          <div className='contnt'>
+          <h3 style={{ textAlign: "center", textDecoration: "underline" }}>
               Tweets and replies
             </h3>
+            {tweets.length ? (
+        <div className='contnt'>
+          {tweets.map((tweet) => (
+            <Tweet key={tweet.id} tweet={tweet} />
+          ))}
+        </div>
+      ) : (
+        <h2>No tweets posted yet</h2>
+      )}
+            
+          </div>
+        </div>
+       </div>
+
+          {/* <div className="tw-rpl">
+           
             {tweets.map((tweet) => (
               <Tweet key={tweet.id} tweet={tweet} />
             ))}
-          </div>
+          </div> */}
+
         </div>
       </div>
     </div>

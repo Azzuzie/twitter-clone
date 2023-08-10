@@ -18,7 +18,8 @@ const Home = () => {
 //  const dispatch = useDispatch();
  let { tweets } = useSelector(selectTweets);
  tweets=tweets.tweets
- debugger
+
+ 
  useEffect(() => {
     dispatch(fetchTweets());
  }, [dispatch]);
@@ -34,32 +35,7 @@ const Home = () => {
     "Authorization":"Bearer "+localStorage.getItem("token")
   }
 }
-// const {tweets}=useSelector(state=>state.tweets)/
-// axios.get(`http://localhost:4000/tweets`,CONFIG_OBJ)
-//           .then((result) => {
-//             if (result) {
-//               dispatch(Tasks(result.data.tweets))
-//               toast.success('Login Successful!');
-//               navigate('/home')
-//             }
-//           })
-//           .catch((error)=>{
-//             toast.error("Error while fetching tweets")
-//           })
-// const dispatch=useDispatch()
-// const [tweets,setTweets]=useState([])
-// const tweets=useSelector(Tweets)
 
-
-  // const getTweets=async()=>{
-  //   // var user=localStorage.getItem('user')
-    
-  //  const response=await axios.get(`http://localhost:4000/tweets`,CONFIG_OBJ)
-  //  console.log(response)
-  //  setTweets(response.data.tweets)
-  //  console.log(tweets)
-  // }
-  // getTweets()
 
   // const navigate=useNavigate()
   const [image,setImage]=useState({preview:'',data:''})
@@ -200,9 +176,6 @@ const Home = () => {
        <div className='d2'>
         <div className='scroll-bar'>
           <div className='contnt'>
-          {/* {tweets.map((tweet) => (
-              <Tweet key={tweet.id} tweet={tweet} />
-            ))} */}
             {tweets.length ? (
         <div className='contnt'>
           {tweets.map((tweet) => (
