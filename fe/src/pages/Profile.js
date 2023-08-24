@@ -9,11 +9,13 @@ import Twitter from "../images/twlg.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTweets,fetchUserTweets } from '../redux/tweetSlice';
 // import {selectUsers} from '../redux/userSlice'
-import { addUser } from "../redux/userSlice";
+import { updateUser } from "../redux/userSlice";
 // import { updateUser } from "../redux/userSlice";
 
 
 const Profile = () => {
+  // console.log(uu)
+  // debugger
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [dob, setDob] = useState(Date);
@@ -24,15 +26,14 @@ const Profile = () => {
   tweets=tweets.tweets
 
 
-  const array= useSelector(state => state.user)
+  const array= useSelector(state=>state.user)
   let { user} = array;
    user= user[0];
   debugger
-  console.log(user)
+  console.log(user.name)
 
   useEffect(() => {
      dispatch(fetchUserTweets());
-    //  dispatch(addUser())
   }, [dispatch]);
 
 
@@ -48,7 +49,10 @@ const Profile = () => {
   if (!name || !location || !dob) {
     toast.error("Fields required");
   } else {
+    const user=JSON.parse(localStorage.getItem("user"))
+    const id=user.id;
     const body = {
+      id,
       name,
       dateOfBirth: dob,
       location,
@@ -56,8 +60,7 @@ const Profile = () => {
     await axios.put(`http://localhost:4000/user/${user._id}`, body, CONFIG_OBJ)
       .then((response) => {
         toast.success("edited successfully");
-      }).then(()=>{
-        dispatch(addUser());
+        dispatch(updateUser(body))
       })
       .catch((error) => {
         toast.error("Error while editing profile");
@@ -71,7 +74,12 @@ const Profile = () => {
   // console.log(currentUser);
  
 
+
+
+
   return (
+
+    
     <div className="container">
       <div className="row">
         <Slide />

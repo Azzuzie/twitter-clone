@@ -36,7 +36,9 @@ router.get('/user/:id', protected, async (req, res) => {
 
 
 router.post('/user/:id/follow',protected, async (req, res) => {
+  console.log("entered follow")
   try {
+
     const { id } = req.params;
     const { _id } = req.user;
 
@@ -80,6 +82,7 @@ router.post('/user/:id/follow',protected, async (req, res) => {
 
 
 router.post('/user/:id/unfollow',protected, async (req, res) => {
+  console.log("entered unfollow")
     try {
       const { id } = req.params;
       const { _id } = req.user;
@@ -178,18 +181,25 @@ router.put('/user/:id',  async(req, res) => {
 //   });
 
 //all posts only from logged in user
-router.get("/mytweets", protected, (req, res) => {
-  // console.log("my tweets")
-  Tweet.find({ tweetedBy: req.user._id })
-      .sort({ createdAt: -1 })
-      .populate("tweetedBy", "_id name username profilePicture dateOfBirth location")
-      .then((tweets) => {
-          return res.status(200).json({ tweets: tweets })
-      })
-      .catch((error) => {
-          console.log(error);
-      })
+
+
+router.get("/user/:userId/tweets", (req, res) => {
+  // Get the userId from the request.
+  const userId = req.params.userId;
+
+  // Get the tweets by the userId.
+  Tweet.find({ tweetedBy: userId })
+    .sort({ createdAt: -1 })
+    .then((tweets) => {
+      // Return the tweets.
+      return res.status(200).json({ tweets: tweets });
+    })
+    .catch((error) => {
+      // Log the error.
+      console.log(error);
+    });
 });
+
   
 //route to delete user from db
   router.get('/user/:id', protected,async(req, res) => {

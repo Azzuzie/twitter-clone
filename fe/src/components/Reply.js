@@ -13,9 +13,9 @@ import {Link} from 'react-router-dom';
 const Reply = ({tweet}) => {
 
 const [reply,setReply]=useState([])
-const [repl,setRepl]=useState('')
+// const [repl,setRepl]=useState('')
 
-console.log(tweet,repl)
+// console.log(tweet,repl)
 
 
 useEffect(()=>{
@@ -37,7 +37,7 @@ useEffect(()=>{
      
      {reply.map((rep)=>{
         return <div>
-            
+        <hr/>    
     <div className='row tweet-div'>
       <div className='col-1 tw1'>
         <div className='pic-section'>
@@ -56,7 +56,7 @@ useEffect(()=>{
       </div>
     </div>
 
-    <div className='likes-section'>
+    {/* <div className='likes-section'>
       <div className='btn btn-outline-primary lks like-btn'>
         <p><i className=" fa-regular fa-heart"></i> {tweet.likes.length}</p>
       </div>
@@ -90,7 +90,7 @@ useEffect(()=>{
       <div className='btn btn-outline-primary lks' >
         <pre><i className="fa-solid fa-retweet"></i> {tweet.retweetBy.length}</pre>
       </div>
-    </div>
+    </div> */}
         </div>
      })}
 

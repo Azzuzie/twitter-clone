@@ -2,11 +2,13 @@ import {React,useState} from 'react'
 // import Twitter from "../images/twlg.jpg"
 import {Link} from 'react-router-dom';
 import Details from '../pages/Details'
-// import Button from 'react-bootstrap/Button';
+import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import './Tweet.css'
 import { toast } from 'react-toastify';
 import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
+// import UserProfile from '../pages/UserProfile';
 // import { useState } from "react";
 
 
@@ -15,6 +17,11 @@ const Tweet = ({ tweet }) => {
   const [rep,setRep]=useState('')
   const [isLiked, setIsLiked] = useState(false);
   // console.log("Entered tweet component")
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  // const navigate=useNavigate()
 
   const CONFIG_OBJ={
     headers:{
@@ -23,17 +30,33 @@ const Tweet = ({ tweet }) => {
     }
   }
 
-  const HandleLike = async () => {
-    if (isLiked) {
-    await axios.post(`http://localhost:4000/tweet/${tweet._id}/dislike`, CONFIG_OBJ);
-        setIsLiked(false);
-      } else {
-        await axios.post(`http://localhost:4000/tweet/${tweet._id}/like`, CONFIG_OBJ);
-        setIsLiked(true);
+  const HandleLike = async ({tweet}) => {
+    // debugger
+    // if (isLiked) {
+    // await axios.post(`http://localhost:4000/tweet/${tweet._id}/dislike`, CONFIG_OBJ);
+    //     setIsLiked(false);
+    //   } else {
+    //     await axios.post(`http://localhost:4000/tweet/${tweet._id}/like`, CONFIG_OBJ)
+    //     .then((response)=>{
+          
+    //       setIsLiked(true);
+    //     })
+    //     .catch(()=>{
+    //       toast.error("Tweet error")
+    //     })
+    //   }
+    debugger
+
+    const response=await axios.post(`http://localhost:4000/tweet/${tweet._id}/like`, CONFIG_OBJ)
+    console.log(response)
+      if(response){
+        setIsLiked(true)
+        
       }
+    
     };
 
-const Reply=async()=>{
+const Reply=async({tweet})=>{
   if(!rep){
     toast.error("add reply")
   }
@@ -51,6 +74,16 @@ const Reply=async()=>{
   }
 }
 
+// const Navig=({id})=>{
+//   const user=JSON.parse(localStorage.getItem("user"))
+// if(id===user.id){
+//   navigate('/profile')
+// }
+// else {
+//   <UserProfile user={tweet.tweetedBy}/>
+//   navigate('/userprofile')
+// }
+// }
 
   return (
     <>
@@ -66,7 +99,7 @@ const Reply=async()=>{
       </div>
       <div className='col-10 tw2'>
         <div className='user-name'>
-          <Link to='/profile'>@{tweet.tweetedBy.username}
+          <Link to='/userprofile' uu={tweet.tweetedBy}>@{tweet.tweetedBy.username}
           </Link>
           <span>- {tweet.createdAt}</span>
         </div>
@@ -82,15 +115,16 @@ const Reply=async()=>{
     <div className='likes-section'>
     <div
         className={`btn btn-outline-primary lks ${isLiked ? 'liked' : ''}`}
-        onClick={HandleLike}
+        onClick={()=>HandleLike({tweet})}
       >
         <p><i className=" fa-regular fa-heart"></i> {tweet.likes.length}</p>
       </div>
-      <div className='btn btn-outline-primary lks' data-bs-toggle="modal" data-bs-target="#exampleModal1" >
+
+      <div className='btn btn-outline-primary lks' variant="primary" onClick={handleShow}>
         <pre><i className="fa-regular fa-comment"></i> {tweet.replies.length}</pre>
       </div>
 
-      <div className="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true">
+      {/* <div className="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -108,7 +142,7 @@ const Reply=async()=>{
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className='btn btn-outline-primary lks' >
         <pre><i className="fa-solid fa-retweet"></i> {tweet.retweetBy.length}</pre>
@@ -137,6 +171,27 @@ const Reply=async()=>{
         </div>
       </Modal.Body>
     </Modal>
+
+
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Tweet Your Reply</Modal.Title>
+        </Modal.Header>
+        <Modal.Body> 
+          <form>
+              <input type='text-area' placeholder='reply' onChange={(ev) => setRep(ev.target.value)}/> <br/> <br/>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={()=>Reply({tweet})}>
+            Reply
+          </Button>
+        </Modal.Footer>
+      </Modal>
   </>
 );
 };

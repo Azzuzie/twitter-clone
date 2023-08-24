@@ -12,9 +12,9 @@ const CONFIG_OBJ={
 
 
   export const addUser = createAsyncThunk(
-    "users/adduser", async (_, thunkAPI) => {  
-        const user=JSON.parse(localStorage.getItem("user"))
+    "users/adduser", async (user, thunkAPI) => {  
        try {
+        debugger
           const response = await axios.get(`http://localhost:4000/user/${user.id}`,CONFIG_OBJ);
           console.log(response.data.user)
           return await response.data.user;
@@ -35,15 +35,15 @@ const CONFIG_OBJ={
 //                     }
 // });
 
-// export const updateUser = createAsyncThunk(
-// "users/updateuser", async (user, thunkAPI) => {     
-// try {
-// const response = await axios.put(`http://localhost:4000/users/{user.id}`,user,CONFIG_OBJ);
-//           return await response.data;
-//         } catch (error) {
-//            return thunkAPI.rejectWithValue({ error: error.message });
-//         }
-//   });
+export const updateUser = createAsyncThunk(
+"users/updateuser", async (user, thunkAPI) => {     
+try {
+const response = await axios.put(`http://localhost:4000/users/{user.id}`,user,CONFIG_OBJ);
+          return await response.data;
+        } catch (error) {
+           return thunkAPI.rejectWithValue({ error: error.message });
+        }
+  });
 
   const userSlice = createSlice({
    
@@ -75,16 +75,16 @@ const CONFIG_OBJ={
     //    });
     //    builder.addCase(removeUser.rejected,(state, action) => {
     //    });
-    //    builder.addCase(updateUser.pending, (state) => {
-    //      state.users = [];
-    //    });
-    //    builder.addCase(
-    //      updateUser.fulfilled, (state, { payload }) => {
-    //          const index = state.users.indexOf(payload);
-    //          state.users.splice(index, 1, payload);
-    //    });
-    //    builder.addCase(updateUser.rejected,(state, action) => {
-    //    });
+       builder.addCase(updateUser.pending, (state) => {
+         state.users = [];
+       });
+       builder.addCase(
+         updateUser.fulfilled, (state, { payload }) => {
+             const index = state.users.indexOf(payload);
+             state.users.splice(index, 1, payload);
+       });
+       builder.addCase(updateUser.rejected,(state, action) => {
+       });
      }
  });
  

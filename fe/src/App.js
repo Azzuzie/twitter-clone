@@ -4,6 +4,7 @@ import Signup from './pages/Signup.js';
 import Home from './pages/Home.js'
 import Profile from './pages/Profile.js'
 import Details from './pages/Details.js';
+import UserProfile from './pages/UserProfile.js';
 // import Total from './pages/Total.js'
 // import Navbar from "./components/Navbar";
 import { ToastContainer} from 'react-toastify';
@@ -19,6 +20,7 @@ function App() {
         <Route exact path="/home" element={<Home/>}></Route>
         <Route exact path="/profile" element={<Profile/>}></Route>
         <Route exact path="/details" element={<Details/>}></Route>
+        <Route exact path="/userprofile" element={<UserProfile/>}></Route>
         {/* <Route exact path="/totalrev" element={<Total/>}></Route> */}
    
       </Routes>
